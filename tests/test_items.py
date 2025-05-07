@@ -19,6 +19,7 @@ def test_min_price_filter() -> None:
 def test_short_name() -> None:
     response = client.post("/items", json={"name": "ab", "price": 5})
     assert response.status_code == 422
+    assert response.json()["detail"][0]["msg"] == "Name must have at least 3 characters"
 
 
 def test_update_to_duplicate_name() -> None:
