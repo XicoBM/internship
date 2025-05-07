@@ -18,6 +18,8 @@ def create_item(item: ItemCreate) -> Item:
 def update_item_by_id(item_id: int, update: ItemUpdate) -> Item | None:
     for item in items_db:
         if item["id"] == item_id:
+            if update.name and any(existing_item["name"] == update.name for existing_item in items_db if existing_item["id"] != item_id):
+                return None
             if update.name:
                 item["name"] = update.name
             if update.price:
