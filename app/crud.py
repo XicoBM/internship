@@ -25,7 +25,7 @@ def update_item_by_id(item_id: int, update: ItemUpdate) -> Item | None:
     for item in items_db:
         if item["id"] == item_id:
             if update.name:
-                if any(existing_item["name"] == update.name for existing_item in items_db if existing_item["id"] != item_id):
+                if any(existing_item["name"] == update.name for existing_item in items_db if existing_item["id"] != item_id) or len(update.name) < 3:
                     return HTTP_422_UNPROCESSABLE_ENTITY
                 item["name"] = update.name
             if update.price:

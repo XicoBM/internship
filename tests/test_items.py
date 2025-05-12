@@ -48,3 +48,9 @@ def test_partial_update() -> None:
     response = client.put(f"/items/{id}", json={"name": "NewName"})
     assert response.status_code == 200
     assert response.json() == {"id": id, "name": "NewName", "price": 1}
+    
+def test_update_item_name() -> None:
+    client.post("/items", json={"name": "ItemToUpdate", "price": 1})
+    id = [item["id"] for item in client.get("/items").json() if item["name"] == "ItemToUpdate"][0]
+    response = client.put(f"/items/{id}", json={"name": "ab"})
+    assert response.status_code == 422
