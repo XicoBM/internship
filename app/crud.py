@@ -31,5 +31,4 @@ def update_item_by_id(item_id: int, update: ItemUpdate) -> Item | None:
             if update.price:
                 item["price"] = update.price
             return Item(**item)
-        return HTTP_400_BAD_REQUEST
     return HTTP_400_BAD_REQUEST

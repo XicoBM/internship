@@ -38,5 +38,13 @@ def test_neg_price_item() -> None:
     assert response.status_code == 422
     
 def test_inexistent_item_update() -> None:
-    response = client.put("/items/999", json={"name": "NewName"})
+    response = client.put("/items/10000000", json={"name": "NewName"})
     assert response.status_code == 400
+    
+def test_partial_update() -> None:
+    unique_name = "ItemPartialUpdateTest"
+    client.post("/items", json={"name": unique_name, "price": 1})
+    id = [item["id"] for item in client.get("/items").json() if item["name"] == unique_name][0]
+    response = client.put(f"/items/{id}", json={"name": "NewName"})
+    assert response.status_code == 200
+    assert response.json() == {"id": id, "name": "NewName", "price": 1}
