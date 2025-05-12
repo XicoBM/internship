@@ -32,3 +32,11 @@ def test_item_name_consistency() -> None:
     response = client.get("/items")
     names = [item["name"] for item in response.json()]
     assert "Item500000" in names
+
+def test_neg_price_item() -> None:
+    response = client.post("/items", json={"name": "Item500000", "price": -1})
+    assert response.status_code == 422
+    
+def test_inexistent_item_update() -> None:
+    response = client.put("/items/999", json={"name": "NewName"})
+    assert response.status_code == 400

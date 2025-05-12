@@ -6,7 +6,7 @@ from pydantic import BaseModel, Field
 class Item(BaseModel):
     id: int
     name: str
-    price: float
+    price: float = Field(..., gt=0)
 
 
 class ItemCreate(BaseModel):

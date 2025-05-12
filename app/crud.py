@@ -11,6 +11,10 @@ def get_items(min_price: float = 0.0) -> List[Item]:
 
 
 def create_item(item: ItemCreate) -> Item:
+    if any(existing_item["name"] == item.name for existing_item in items_db):
+        return HTTP_422_UNPROCESSABLE_ENTITY
+    if item.price <= 0:
+        return HTTP_422_UNPROCESSABLE_ENTITY
     new_id = max((item["id"] for item in items_db), default=1) + 1
     new_item = {"id": new_id, **item.dict()}
     items_db.append(new_item)
@@ -27,4 +31,5 @@ def update_item_by_id(item_id: int, update: ItemUpdate) -> Item | None:
             if update.price:
                 item["price"] = update.price
             return Item(**item)
+        return HTTP_400_BAD_REQUEST
     return HTTP_400_BAD_REQUEST
